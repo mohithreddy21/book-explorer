@@ -1,0 +1,186 @@
+:root {
+    --background: #ffffff;
+    --foreground: #000000;
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+header {
+    background-color: #1a202c; /* Dark background */
+    color: white;
+    padding: 1rem 0;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+}
+
+header a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+}
+
+nav a {
+    color: white;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #cbd5e0; /* Light gray hover effect */
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--foreground);
+    background-color: var(--background);
+}
+
+.container {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* 📌 Carousel Styles */
+.carousel {
+    position: relative;
+    width: 100%;
+    max-width: 80rem;
+    margin: 2rem auto;
+    overflow: visible;
+}
+
+.carousel-content {
+    overflow: hidden;
+    display: flex;
+    gap: 1rem;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item {
+    flex: 0 0 auto;
+    width: 220px; /* Fixed width for each book card */
+    text-align: center;
+}
+
+.book-card {
+    background-color: var(--background);
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    width: 100%;
+    max-width: 220px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+.book-cover img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+
+.book-title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.book-author {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    margin-bottom: 1rem;
+}
+
+/* 📌 Carousel Navigation Buttons */
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: background 0.3s ease;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-button:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.carousel-prev {
+    left: -20px; /* Adjusted position */
+}
+
+.carousel-next {
+    right: -20px; /* Adjusted position */
+}
+
+/* 📌 Responsive Improvements */
+@media (max-width: 768px) {
+    .carousel-item {
+        width: 180px;
+    }
+
+    .carousel-button {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-content {
+        gap: 0.5rem;
+    }
+
+    .carousel-item {
+        width: 150px;
+    }
+
+    .book-cover img {
+        height: 220px;
+    }
+
+    .carousel-button {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+}
+
+  
+  
