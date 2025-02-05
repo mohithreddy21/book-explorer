@@ -33,6 +33,10 @@ app.get("/getbooks",async (req,res)=>{
     }
 });
 
+app.get("/categoryPage",(req,res)=>{
+    res.redirect("/");
+})
+
 app.listen(port,()=>{
     console.log(`Server running from ${port}`);
 })

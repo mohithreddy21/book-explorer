@@ -1,3 +1,5 @@
+
+
   
   function createBookCard(book) {
     return `
@@ -17,20 +19,75 @@
   
   function createCarousel(category, books) {
     const carouselHtml = `
-          <div class="carousel">
-              <h2>${category}</h2>
-              <div class="carousel-content">
-                  ${books.map(createBookCard).join("")}
-              </div>
-              <button class="carousel-button carousel-prev">&lt;</button>
-              <button class="carousel-button carousel-next">&gt;</button>
-          </div>
-      `
-    return carouselHtml
+      <h2>${category}</h2>
+      <div class="carousel-content">
+          ${books.map(createBookCard).join("")}
+      </div>
+      <button class="carousel-button carousel-prev">&lt;</button>
+      <button class="carousel-button carousel-next">&gt;</button>
+      `;
+    const newCarousel = document.createElement("div");
+    newCarousel.setAttribute("class","carousel");
+    newCarousel.innerHTML = carouselHtml;
+    return newCarousel;
   }
   
-  function initCarousels() {
-    const carouselsContainer = document.getElementById("carousels-container")
+  async function fetchCategoryBooks(category) {
+    try{
+      const response = await fetch(`/getbooks?subject=${category}`);
+      const books = await response.json();
+      return books;
+    }
+    catch(error){
+      console.log(`Error fetching books for ${category}:`, error);
+      return [];
+    }
+  }
+
+
+function setupCarouselEventListeners(){
+  document.querySelectorAll(".carousel").forEach((carousel)=>{
+    const content = carousel.querySelector(".carousel-content");
+    const prevButton = carousel.querySelector(".carousel-prev");
+    const nextButton = carousel.querySelector(".carousel-next");
+    let position = 0;
+
+    function updateCarouselPosition(){
+      content.style.transform = `translateX(${position}px)`;
+    }
+
+    function movePosition(direction){
+      const itemWidth = content.children[0].offsetWidth;
+      const numberOfItems = Math.floor(carousel.offsetWidth/itemWidth);
+      const movement = itemWidth * numberOfItems;
+      const maxPosition = Math.min(0, -(content.scrollWidth - carousel.offsetWidth));
+
+      if(direction == "prev"){
+        position = Math.min(position + movement,0);
+      }
+      else{
+        position = Math.max(position - movement,maxPosition);
+      }
+      updateCarouselPosition();
+    }
+    prevButton.addEventListener("click",()=>{
+      movePosition("prev");
+    });
+    nextButton.addEventListener("click",()=>{
+      movePosition("next");
+    })
+    document.addEventListener("resize",()=>{
+      position = 0;
+      updateCarouselPosition();
+    })
+  })
+
+}
+
+
+
+async function initCarousels() {
+    const carouselsContainer = document.getElementById("carousels-container");
     const categories = [
         "Fiction",
         "Mystery",
@@ -43,62 +100,15 @@
         // "Technology",
         // "Business"
       ];
-  
     for(const category of categories){
-      const categoryBooks = async (category)=>{
-        try{
-            const response = await fetch(`/getbooks?subject=${category}`);
-            const data = await response.json();
-            carouselsContainer.innerHTML += createCarousel(category, data);
-        }
-        catch(error){
-            console.log(error);
-        }
-      }
-      categoryBooks(category);
+      const books = await fetchCategoryBooks(category);
+      carouselsContainer.insertAdjacentElement("beforeend",createCarousel(category,books));
     }
-  
-    const carousels = document.querySelectorAll(".carousel")
-    carousels.forEach((carousel) => {
-      const content = carousel.querySelector(".carousel-content")
-      const prevBtn = carousel.querySelector(".carousel-prev")
-      const nextBtn = carousel.querySelector(".carousel-next")
-      console.log(prevBtn)
-      console.log(nextBtn)
-      let position = 0
-  
-      function updateCarouselPosition() {
-        content.style.transform = `translateX(${position}px)`
-      }
-  
-      function moveCarousel(direction) {
-        const itemWidth = content.children[0].offsetWidth
-        const visibleItems = Math.floor(carousel.offsetWidth / itemWidth)
-        const moveAmount = itemWidth * visibleItems
-        const maxPosition = -(content.scrollWidth - carousel.offsetWidth)
-  
-        if (direction === "prev") {
-          position = Math.min(position + moveAmount, 0)
-        } else {
-          position = Math.max(position - moveAmount, maxPosition)
-        }
-  
-        updateCarouselPosition()
-      }
-  
-      prevBtn.addEventListener("click", () => {
-        console.log("prevButton clicked");
-        moveCarousel("prev");
-        })
-      nextBtn.addEventListener("click", () => moveCarousel("next"))
-  
-      // Adjust carousel on window resize
-      window.addEventListener("resize", () => {
-        position = 0
-        updateCarouselPosition()
-      })
-    })
+    setupCarouselEventListeners();
   }
+
+
+
   
   document.addEventListener("DOMContentLoaded", initCarousels)
   
