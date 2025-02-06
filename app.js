@@ -13,14 +13,16 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const URL = "https://openlibrary.org/subjects";
 
 
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname,"public")));
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 
 
 app.get("/",(req,res)=>{
-    res.render("index.ejs");
+    res.render("home.ejs");
 })
+
+
 
 app.get("/getbooks",async (req,res)=>{
     try{
@@ -34,7 +36,21 @@ app.get("/getbooks",async (req,res)=>{
 });
 
 app.get("/categoryPage",(req,res)=>{
-    res.redirect("/");
+    res.render("index.ejs");
+})
+
+app.get("/bookdetails",async (req,res)=>{
+    const bookId = req.query.key;
+    try{
+        const response = await axios.get("https://openlibrary.org"+`${bookId}.json`);
+        const bookdetails = response.data;
+        console.log(bookdetails);
+        res.render("book",{details:bookdetails});
+    }
+    catch(error){
+        console.log(error);
+        res.redirect("/categoryPage");
+    }
 })
 
 app.listen(port,()=>{

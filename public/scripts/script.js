@@ -4,7 +4,7 @@
   function createBookCard(book) {
     return `
           <div class="carousel-item">
-              <div class="book-card">
+              <div class="book-card" id="${book.key}">
                   <div class="book-card-content">
                       <div class="book-cover">
                           <img src="https://covers.openlibrary.org/b/id/${book.cover_id}-L.jpg" alt="Cover of ${book.title}">
@@ -48,6 +48,13 @@
 function setupCarouselEventListeners(){
   document.querySelectorAll(".carousel").forEach((carousel)=>{
     const content = carousel.querySelector(".carousel-content");
+    const books = content.querySelectorAll(".book-card");
+    books.forEach((book)=>{
+      book.addEventListener("click",function(){
+        console.log(this.id);
+        window.location.href = `/bookdetails?key=${this.id}`;
+      })
+    })
     const prevButton = carousel.querySelector(".carousel-prev");
     const nextButton = carousel.querySelector(".carousel-next");
     let position = 0;
@@ -86,12 +93,14 @@ function setupCarouselEventListeners(){
 
 
 
+
+
 async function initCarousels() {
     const carouselsContainer = document.getElementById("carousels-container");
     const categories = [
         "Fiction",
         "Mystery",
-        "Fantasy",
+        // "Fantasy",
         // "Romance",
         // "Sports",
         // "Literature",

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%=details.title%></title>
+    <link rel="stylesheet" href="styles/book.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="#" class="text-2xl font-bold">Book Explorer</a>
+            
+            <!-- Search Bar -->
+            <div class="relative w-1/3">
+                <input type="text" id="searchInput" placeholder="Search books..." class="search-input">
+            </div>
+    
+            <nav>
+                <ul>
+                    <li><a href="/" class="hover:text-gray-400">Home</a></li>
+                    <li><a href="CategoryPage" id="CategoryPage" class="hover:text-gray-400">Categories</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="book-cover">
+            <img src="https://covers.openlibrary.org/b/id/<%=details.covers[0] %>-L.jpg" alt="Book Cover">
+        </div>
+        <div class="book-details">
+            <h1><%= details.title %></h1>
+            <p>Author: <%= details.authors[0] ? details.authors[0].author.name : 'Unknown' %></p>
+
+
+            <div class="overview">
+                <h2>Overview</h2>
+                <p>
+                    <%= details.description %>
+                </p>
+            </div>
+
+            <div class="details">
+                <h2>Book Details</h2>
+                <table class="details-table">
+                    <tr>
+                        <td>Publish date</td>
+                        <td><%= details.first_publish_date  %></td>
+                    </tr>
+                    <tr>
+                        <td>Categories</td>
+                        <td><% for(let i = 0;i<10;i++){%>
+                            <%if(i!==9){%>
+                                <span><%=details.subjects[i]%>,</span>
+                            <% }else{ %>
+                                <span><%=details.subjects[i]%>.</span>
+                            <% } %>
+                        <% }; %></td>
+                    </tr>
+                    <tr>
+                        <td>Pages</td>
+                        <td>656</td>
+                    </tr>
+                    <tr>
+                        <td>Format</td>
+                        <td>Paperback</td>
+                    </tr>
+                    <tr>
+                        <td>Open Library ID</td>
+                        <td><% let l = details.key.split("/"); %>
+                            <%= l[l.length - 1] %>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
